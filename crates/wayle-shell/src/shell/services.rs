@@ -33,7 +33,7 @@ pub(crate) struct ShellServices {
     pub idle_inhibit: Arc<IdleInhibitService>,
     pub media: Option<Arc<MediaService>>,
     pub network: Option<Arc<NetworkService>>,
-    pub notification: Option<Arc<NotificationService>>,
+    pub notification: None, // Notification service disabled
     pub power_profiles: DeferredService<PowerProfilesService>,
     pub sysinfo: Arc<SysinfoService>,
     pub systray: Option<Arc<SystemTrayService>>,
