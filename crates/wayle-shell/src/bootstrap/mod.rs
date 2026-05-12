@@ -160,7 +160,6 @@ pub async fn init_services() -> Result<(StartupTimer, ShellServices), Box<dyn Er
         idle_inhibit: core.idle_inhibit,
         media: daemons.media,
         network: core.network,
-        notification: None, // Notification service disabled
         sysinfo: core.sysinfo,
         systray: daemons.systray,
         wallpaper: core.wallpaper,
