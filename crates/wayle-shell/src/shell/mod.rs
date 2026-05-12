@@ -94,7 +94,7 @@ impl Component for Shell {
 
         init.timer.finish();
 
-        // Notification service disabled - notification_popup will not be initialized
+        // Notification service disabled
         let notification_popup = None;
 
         let osd = create_osd(&init.services);
