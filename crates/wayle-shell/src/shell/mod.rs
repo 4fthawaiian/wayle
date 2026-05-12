@@ -94,14 +94,8 @@ impl Component for Shell {
 
         init.timer.finish();
 
-        let notification_popup = init.services.notification.as_ref().map(|notification| {
-            NotificationPopupHost::builder()
-                .launch(PopupHostInit {
-                    notification: notification.clone(),
-                    config: init.services.config.clone(),
-                })
-                .detach()
-        });
+        // Notification service disabled - notification_popup will not be initialized
+        let notification_popup = None;
 
         let osd = create_osd(&init.services);
 
