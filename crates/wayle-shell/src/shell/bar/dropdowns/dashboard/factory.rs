@@ -17,7 +17,7 @@ impl DropdownFactory for Factory {
             config: services.config.clone(),
             media: services.media.clone(),
             network: services.network.clone(),
-            notification: services.notification.clone(),
+            notification: None,
             power_profiles: services.power_profiles.clone(),
             sysinfo: services.sysinfo.clone(),
             idle_inhibit: services.idle_inhibit.clone(),
