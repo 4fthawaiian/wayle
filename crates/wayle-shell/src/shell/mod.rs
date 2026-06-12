@@ -208,7 +208,7 @@ fn trigger_layer_shell_reconfigure(window: &gtk::Window) {
 fn create_notification_popup(
     services: &ShellServices,
 ) -> Option<Controller<NotificationPopupHost>> {
-    let notification_enabled = services.config.config().modules.notification.enabled.get();
+    let notification_enabled = services.config.config().modules.notifications.enabled.get();
     let notification_service = services.notification.as_ref()?;
 
     if !notification_enabled {

@@ -20,7 +20,7 @@ impl ModuleFactory for Factory {
         dropdowns: &Rc<DropdownRegistry>,
         class: Option<String>,
     ) -> Option<ModuleInstance> {
-        let notification_enabled = services.config.config().modules.notification.enabled.get();
+        let notification_enabled = services.config.config().modules.notifications.enabled.get();
         let notification_service = services.notification.as_ref()?;
 
         if !notification_enabled {

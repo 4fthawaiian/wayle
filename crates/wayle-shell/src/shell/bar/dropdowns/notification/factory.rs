@@ -2,7 +2,7 @@ use relm4::prelude::*;
 
 use super::{NotificationDropdown, messages::NotificationDropdownInit};
 use crate::shell::{
-    bar::dropdowns::{DropdownFactory, DropdownInstance},
+    bar::dropdowns::{DropdownFactory, DropdownInstance, require_service},
     services::ShellServices,
 };
 
@@ -10,8 +10,12 @@ pub(crate) struct Factory;
 
 impl DropdownFactory for Factory {
     fn create(services: &ShellServices) -> Option<DropdownInstance> {
-        let notification_enabled = services.config.config().modules.notification.enabled.get();
-        let notification = services.notification.clone()?;
+        let notification_enabled = services.config.config().modules.notifications.enabled.get();
+        let notification = require_service(
+            "notification",
+            "notification",
+            services.notification.clone(),
+        )?;
 
         if !notification_enabled {
             return None;
