@@ -9,6 +9,7 @@ use wayle_core::DeferredService;
 use wayle_hyprland::HyprlandService;
 use wayle_media::MediaService;
 use wayle_network::NetworkService;
+use wayle_notification::NotificationService;
 use wayle_power_profiles::PowerProfilesService;
 use wayle_sysinfo::SysinfoService;
 use wayle_systray::SystemTrayService;
@@ -32,7 +33,7 @@ pub(crate) struct ShellServices {
     pub idle_inhibit: Arc<IdleInhibitService>,
     pub media: Option<Arc<MediaService>>,
     pub network: Option<Arc<NetworkService>>,
-    // Notification service disabled
+    pub notification: Option<Arc<NotificationService>>,
     pub power_profiles: DeferredService<PowerProfilesService>,
     pub sysinfo: Arc<SysinfoService>,
     pub systray: Option<Arc<SystemTrayService>>,

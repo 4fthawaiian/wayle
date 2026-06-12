@@ -15,6 +15,9 @@ use crate::{
 /// Notification center: icon in the bar, dropdown with history, DND toggle.
 #[wayle_config(bar_button, i18n_prefix = "settings-modules-notification")]
 pub struct NotificationConfig {
+    /// Enable the notification service and module.
+    #[default(true)]
+    pub enabled: ConfigProperty<bool>,
     /// Icon shown when no notifications and DND is off.
     #[serde(rename = "icon-name")]
     #[default(String::from("ld-bell-symbolic"))]

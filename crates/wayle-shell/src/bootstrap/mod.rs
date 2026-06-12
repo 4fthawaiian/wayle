@@ -22,6 +22,7 @@ use wayle_hyprland::HyprlandService;
 use wayle_ipc::shell::APP_ID;
 use wayle_media::MediaService;
 use wayle_network::NetworkService;
+use wayle_notification::NotificationService;
 use wayle_power_profiles::PowerProfilesService;
 use wayle_sysinfo::SysinfoService;
 use wayle_systray::{SystemTrayService, types::TrayMode};
@@ -76,6 +77,7 @@ struct CoreServices {
 struct DaemonServices {
     audio: Option<Arc<AudioService>>,
     media: Option<Arc<MediaService>>,
+    notification: Option<Arc<NotificationService>>,
     systray: Option<Arc<SystemTrayService>>,
 }
 
@@ -160,6 +162,7 @@ pub async fn init_services() -> Result<(StartupTimer, ShellServices), Box<dyn Er
         idle_inhibit: core.idle_inhibit,
         media: daemons.media,
         network: core.network,
+        notification: daemons.notification,
         sysinfo: core.sysinfo,
         systray: daemons.systray,
         wallpaper: core.wallpaper,
@@ -291,6 +294,20 @@ async fn init_daemon_services(
             .build(),
     );
 
+    // Conditionally initialize notification service
+    let notification = if modules.notification.enabled.get() {
+        let blocklist = Property::new(modules.notification.blocklist.get());
+        let notification_task = tokio::spawn(
+            NotificationService::builder()
+                .with_daemon()
+                .blocklist(blocklist)
+                .build(),
+        );
+        try_service!(timer, "Notification", spawned(notification_task), no_wrap).await
+    } else {
+        None
+    };
+
     let (audio, media, systray) = tokio::join!(
         async { try_service!(timer, "Audio", spawned(audio_task), no_wrap) },
         async { try_service!(timer, "Media", spawned(media_task), no_wrap) },
@@ -300,6 +317,7 @@ async fn init_daemon_services(
     DaemonServices {
         audio,
         media,
+        notification,
         systray,
     }
 }

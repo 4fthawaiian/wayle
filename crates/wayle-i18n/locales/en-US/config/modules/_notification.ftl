@@ -2,6 +2,9 @@
 
 ## Notification Module Configuration
 
+settings-modules-notification-enabled = Enabled
+    .description = Enable the notification service and module
+
 settings-modules-notification-icon-name = Default Icon
     .description = Icon shown when no notifications
 

@@ -1,26 +1,39 @@
 use std::rc::Rc;
 
-use tracing::warn;
+use relm4::prelude::*;
 use wayle_widgets::prelude::BarSettings;
 
 use crate::shell::{
     bar::{
         dropdowns::DropdownRegistry,
-        modules::registry::{ModuleFactory, ModuleInstance},
+        modules::registry::{ModuleFactory, ModuleInstance, dynamic_controller},
     },
     services::ShellServices,
 };
 
-pub(crate) struct Factory;
+use super::{Factory, NotificationInit, NotificationModule};
 
 impl ModuleFactory for Factory {
     fn create(
-        _settings: &BarSettings,
-        _services: &ShellServices,
-        _dropdowns: &Rc<DropdownRegistry>,
-        _class: Option<String>,
+        settings: &BarSettings,
+        services: &ShellServices,
+        dropdowns: &Rc<DropdownRegistry>,
+        class: Option<String>,
     ) -> Option<ModuleInstance> {
-        warn!(module = "notification", "notification service disabled, skipping module");
-        None
+        let notification_enabled = services.config.config().modules.notification.enabled.get();
+        let notification_service = services.notification.as_ref()?;
+
+        if !notification_enabled {
+            return None;
+        }
+
+        let init = NotificationInit {
+            settings: settings.clone(),
+            notification: notification_service.clone(),
+            config: services.config.clone(),
+            dropdowns: dropdowns.clone(),
+        };
+        let controller = dynamic_controller(NotificationModule::builder().launch(init).detach());
+        Some(ModuleInstance { controller, class })
     }
 }
